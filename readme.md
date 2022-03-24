@@ -1,3 +1,4 @@
-<p><img src="https://raw.githubusercontent.com/agragregra/Simple-Starter/main/images/preview.png" alt="Start HTML Template"></p>
+<p><img src="https://github.com/VnVBootcamp/perrikulos/blob/master/images/perrikulos-main-img.jpg" alt="Start HTML Template"></p>
 <p>Clone:</p>
-<pre>git clone https://github.com/agragregra/Simple-Starter .; rm -rf trunk .gitignore readme.md .git</pre># perrikulos
+<pre>git clone https://github.com/agragregra/Simple-Starter .; rm -rf trunk .gitignore readme.md .git</pre>
+#perrikulos
