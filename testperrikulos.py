@@ -1,9 +1,9 @@
 """Unit test file for perrikulos.py"""
-import returnBackwardsString
+from app import perrikulos.returnBackwardsString
 import unittest
 
 class TestApp(unittest.TestCase):
-    """Unit tests defined for app.py"""
+    """Unit tests defined for perrikulos.py"""
 
     def test_return_backwards_string(self):
         """Test return backwards simple string"""
