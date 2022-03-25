@@ -46,17 +46,17 @@ jobs:
     - name: Build, tag, and push image to Amazon ECR
       id: build-image
       env:
-        ECR_REGISTRY: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.us-west-2.amazonaws.com
+        ECR_REGISTRY: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com
         ECR_REPOSITORY: ${{ env.ECR_REPOSITORY }}
         IMAGE_TAG: ${{ github.sha }}
       run: |
         # Build a docker container and
         # push it to ECR so that it can
         # be deployed to ECS.
-        docker build -t perrikulos-ecr-private-repo .
-        docker tag perrikulos-ecr-private-repo:$IMAGE_TAG 094887935327.dkr.ecr.us-west-2.amazonaws.com/perrikulos-ecr-private-repo:$IMAGE_TAG
-        docker push ${{ env.ECR_REGISTRY }}/perrikulos-ecr-private-repo:$IMAGE_TAG
-        echo "::set-output name=image::${{ env.ECR_REGISTRY }}/perrikulos-ecr-private-repo:$IMAGE_TAG"
+        docker build -t ${{ env.ECR_REPOSITORY }} .
+        docker tag ${{ env.ECR_REPOSITORY }}:$IMAGE_TAG ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:$IMAGE_TAG
+        docker push ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:$IMAGE_TAG
+        echo "::set-output name=image::${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:$IMAGE_TAG"
 
     - name: Render Amazon ECS task definition
       id: render-web-container
