@@ -13,7 +13,7 @@ phases:
   build:
     commands:
       - docker build -f Dockerfile -t perrikulos-ecr-private-repo .
-      - docker tag perrikulos-ecr-private-repo:latest 094887935327.dkr.ecr.us-west-2.amazonaws.com/perrikulos-ecr-private-repo:$IMAGE_TAG
+      - docker tag perrikulos-ecr-private-repo:$IMAGE_TAG 094887935327.dkr.ecr.us-west-2.amazonaws.com/perrikulos-ecr-private-repo:$IMAGE_TAG
 
     post_build:
       commands:
