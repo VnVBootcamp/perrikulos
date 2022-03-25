@@ -44,7 +44,7 @@ jobs:
         username: ${{ secrets.AWS_ACCESS_KEY_ID }}
         password: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
-    - name: Build, tag, and push image to Amazon ECR
+    - name: Build, tag, and push docker image to Amazon ECR
       id: build-image
       env:
         ECR_REGISTRY: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com
@@ -64,7 +64,7 @@ jobs:
       uses: aws-actions/amazon-ecs-render-task-definition@v1
       with:
         environment-variables: "LOG_LEVEL=info"
-        task-definition: ${{ env.ECS_TASK_DEFINITION }}
+        task-definition: ${{ env.ECS_TASK_DEFINITION }}.json
         container-name: ${{ env.CONTAINER_NAME }}
         image: ${{ steps.build-image.outputs.image }}
 
