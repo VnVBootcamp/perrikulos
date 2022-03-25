@@ -1,26 +1,30 @@
 version: 0.2
 phases:
+  install:
+    runtime-versions:
+      python: 3.8
   pre_build:
     commands:
+      - pip install -r requirements.txt
+      - python perrikulos.py
       - $(aws ecr get-login --region us-west-2 --no-include-email)
       - COMMIT_HASH="$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)"
       - IMAGE_TAG="${COMMIT_HASH:=latest}"
       - printenv
-
   build:
     commands:
       - docker build -f infrastructure/Dockerfile -t public.ecr.aws/i3a0t0o0/perrikulos-ecr-repository:latest .
       - docker tag public.ecr.aws/i3a0t0o0/perrikulos-ecr-repository:latest public.ecr.aws/i3a0t0o0/perrikulos-ecr-repository:$IMAGE_TAG
 
-  post_build:
-    commands:
-      - docker push public.ecr.aws/i3a0t0o0/perrikulos-ecr-repository:latest
-      - docker push public.ecr.aws/i3a0t0o0/perrikulos-ecr-repository:$IMAGE_TAG
-      - export IMAGE_NAME='ecs-devops-sandbox'
-      - export IMAGE_URI=public.ecr.aws/i3a0t0o0/perrikulos-ecr-repository:$IMAGE_TAG
-      - "printf '[{\"name\":\"%s\",\"imageUri\":\"%s\"}]' \"$IMAGE_NAME\" \"$IMAGE_URI\" > imagedefinitions.json"
+    post_build:
+      commands:
+        - docker push public.ecr.aws/i3a0t0o0/perrikulos-ecr-repository:latest
+        - docker push public.ecr.aws/i3a0t0o0/perrikulos-ecr-repository:$IMAGE_TAG
+        - export IMAGE_NAME='ecs-devops-sandbox'
+        - export IMAGE_URI=public.ecr.aws/i3a0t0o0/perrikulos-ecr-repository:$IMAGE_TAG
+        - "printf '[{\"name\":\"%s\",\"imageUri\":\"%s\"}]' \"$IMAGE_NAME\" \"$IMAGE_URI\" > imagedefinitions.json"
 
 
-artifacts:
-  files:
-    - imagedefinitions.json
+  artifacts:
+    files:
+      - imagedefinitions.json
