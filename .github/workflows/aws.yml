@@ -7,7 +7,7 @@ on:
 
 env:
   AWS_REGION: ${{ secrets.AWS_REGION }}                   # set this to your preferred AWS region, e.g. us-west-1
-  ECR_REPOSITORY: public.ecr.aws/i3a0t0o0/perrikulos-ecr-repository           # set this to your Amazon ECR repository name
+  ECR_REPOSITORY: perrikulos-ecr-repository           # set this to your Amazon ECR repository name
   ECS_SERVICE: perrikulos-ecr-service                 # set this to your Amazon ECS service name
   ECS_CLUSTER: perrikulos-cluster-1                 # set this to your Amazon ECS cluster name
   ECS_TASK_DEFINITION: perrikulos-task-def # set this to the path to your Amazon ECS task definition
@@ -36,10 +36,15 @@ jobs:
       id: login-ecr
       uses: aws-actions/amazon-ecr-login@v1
 
+    - name: Login to ECR Docker
+      uses: docker/login-action@v1
+      with:
+        registry: ${{ secrets.AWS_ECR_REPOSITORY }}
+
     - name: Build, tag, and push image to Amazon ECR
       id: build-image
       env:
-        ECR_REGISTRY: public.ecr.aws/i3a0t0o0
+        ECR_REGISTRY: ${{ secrets.ECR_REGISTRY }}
         ECR_REPOSITORY: perrikulos-ecr-repository
         IMAGE_TAG: ${{ github.sha }}
       run: |
