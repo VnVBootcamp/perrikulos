@@ -1,5 +1,5 @@
 """Unit test file for perrikulos.py"""
-from app import returnBackwardsString
+import returnBackwardsString
 import unittest
 
 class TestApp(unittest.TestCase):
