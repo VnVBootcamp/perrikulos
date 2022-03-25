@@ -2,22 +2,22 @@ version: 0.2
 phases:
   pre_build:
     commands:
-      - $(aws ecr get-login --region $AWS_DEFAULT_REGION --no-include-email)
+      - $(aws ecr get-login --region us-west-2 --no-include-email)
       - COMMIT_HASH="$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)"
       - IMAGE_TAG="${COMMIT_HASH:=latest}"
       - printenv
 
   build:
     commands:
-      - docker build -f infrastructure/Dockerfile -t $REPOSITORY_URI:latest .
-      - docker tag $REPOSITORY_URI:latest $REPOSITORY_URI:$IMAGE_TAG
+      - docker build -f infrastructure/Dockerfile -t public.ecr.aws/i3a0t0o0/perrikulos-ecr-repository:latest .
+      - docker tag public.ecr.aws/i3a0t0o0/perrikulos-ecr-repository:latest public.ecr.aws/i3a0t0o0/perrikulos-ecr-repository:$IMAGE_TAG
 
   post_build:
     commands:
-      - docker push $REPOSITORY_URI:latest
-      - docker push $REPOSITORY_URI:$IMAGE_TAG
-      - export IMAGE_NAME='projectName'
-      - export IMAGE_URI=$REPOSITORY_URI:$IMAGE_TAG
+      - docker push public.ecr.aws/i3a0t0o0/perrikulos-ecr-repository:latest
+      - docker push public.ecr.aws/i3a0t0o0/perrikulos-ecr-repository:$IMAGE_TAG
+      - export IMAGE_NAME='ecs-devops-sandbox'
+      - export IMAGE_URI=public.ecr.aws/i3a0t0o0/perrikulos-ecr-repository:$IMAGE_TAG
       - "printf '[{\"name\":\"%s\",\"imageUri\":\"%s\"}]' \"$IMAGE_NAME\" \"$IMAGE_URI\" > imagedefinitions.json"
 
 
