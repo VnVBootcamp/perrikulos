@@ -7,7 +7,7 @@ on:
 
 env:
   AWS_REGION: ${{ secrets.AWS_REGION }}                   # set this to your preferred AWS region, e.g. us-west-1
-  ECR_REPOSITORY: perrikulos-ecr-repository           # set this to your Amazon ECR repository name
+  ECR_REPOSITORY: public.ecr.aws/i3a0t0o0/perrikulos-ecr-repository           # set this to your Amazon ECR repository name
   ECS_SERVICE: perrikulos-ecr-service                 # set this to your Amazon ECS service name
   ECS_CLUSTER: perrikulos-cluster-1                 # set this to your Amazon ECS cluster name
   ECS_TASK_DEFINITION: perrikulos-task-def # set this to the path to your Amazon ECS task definition
@@ -39,15 +39,15 @@ jobs:
     - name: Build, tag, and push image to Amazon ECR
       id: build-image
       env:
-        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+        ECR_REGISTRY: public.ecr.aws/i3a0t0o0
         ECR_REPOSITORY: perrikulos-ecr-repository
         IMAGE_TAG: ${{ github.sha }}
       run: |
         # Build a docker container and
         # push it to ECR so that it can
         # be deployed to ECS.
-        docker build -t $ECR_REPOSITORY:$IMAGE_TAG .
-        docker push $ECR_REPOSITORY:$IMAGE_TAG
+        docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+        docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
         echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
 
     - name: Render Amazon ECS task definition
