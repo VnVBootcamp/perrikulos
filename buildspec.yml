@@ -6,7 +6,7 @@ phases:
   pre_build:
     commands:
       - pip install -r requirements.txt
-      - python perrikulos.py
+      - python testperrikulos.py
       - COMMIT_HASH="$(echo "$CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7")"
       - IMAGE_TAG="latest"
       - printenv
