@@ -8,7 +8,7 @@ phases:
       - pip install -r requirements.txt
       - python perrikulos.py
       - COMMIT_HASH="$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)"
-      - IMAGE_TAG=${{ github.sha }}
+      - IMAGE_TAG="${COMMIT_HASH}"
       - printenv
   build:
     commands:
@@ -17,7 +17,6 @@ phases:
 
     post_build:
       commands:
-        - docker push public.ecr.aws/i3a0t0o0/perrikulos-ecr-repository:latest
-        - docker push public.ecr.aws/i3a0t0o0/perrikulos-ecr-repository:$IMAGE_TAG
+        - docker push docker push 094887935327.dkr.ecr.us-west-2.amazonaws.com/perrikulos-ecr-private-repo:$IMAGE_TAG
         - export IMAGE_NAME='ecs-devops-sandbox'
-        - export IMAGE_URI=public.ecr.aws/i3a0t0o0/perrikulos-ecr-repository:$IMAGE_TAG
+        - export IMAGE_URI=094887935327.dkr.ecr.us-west-2.amazonaws.com/perrikulos-ecr-private-repo:$IMAGE_TAG
