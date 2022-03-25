@@ -12,11 +12,11 @@ phases:
       - printenv
   build:
     commands:
-      - docker build -f Dockerfile -t perrikulos-ecr-private-repo-1 .
-      - docker tag perrikulos-ecr-private-repo-1:$IMAGE_TAG 094887935327.dkr.ecr.us-west-2.amazonaws.com/perrikulos-ecr-private-repo-1:$IMAGE_TAG
+      - docker build -f Dockerfile -t perrikulos-ecr-public-repo .
+      - docker tag perrikulos-ecr-public-repo:$IMAGE_TAG public.ecr.aws/i3a0t0o0/perrikulos-ecr-public-repo:$IMAGE_TAG
 
     post_build:
       commands:
-        - docker push docker push 094887935327.dkr.ecr.us-west-2.amazonaws.com/perrikulos-ecr-private-repo-1:$IMAGE_TAG
+        - docker push public.ecr.aws/i3a0t0o0/perrikulos-ecr-public-repo:$IMAGE_TAG
         - export IMAGE_NAME='ecs-devops-sandbox'
-        - export IMAGE_URI=094887935327.dkr.ecr.us-west-2.amazonaws.com/perrikulos-ecr-private-repo-1:$IMAGE_TAG
+        - export IMAGE_URI=public.ecr.aws/i3a0t0o0/perrikulos-ecr-public-repo:$IMAGE_TAG
