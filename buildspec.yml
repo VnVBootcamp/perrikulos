@@ -22,9 +22,3 @@ phases:
         - docker push public.ecr.aws/i3a0t0o0/perrikulos-ecr-repository:$IMAGE_TAG
         - export IMAGE_NAME='ecs-devops-sandbox'
         - export IMAGE_URI=public.ecr.aws/i3a0t0o0/perrikulos-ecr-repository:$IMAGE_TAG
-        - "printf '[{\"name\":\"%s\",\"imageUri\":\"%s\"}]' \"$IMAGE_NAME\" \"$IMAGE_URI\" > imagedefinitions.json"
-
-
-  artifacts:
-    files:
-      - imagedefinitions.json
