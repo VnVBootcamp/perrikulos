@@ -7,7 +7,7 @@ on:
 
 env:
   AWS_REGION: ${{ secrets.AWS_REGION }}                   # set this to your preferred AWS region, e.g. us-west-1
-  ECR_REPOSITORY: perrikulos-ecr-repository           # set this to your Amazon ECR repository name
+  ECR_REPOSITORY: perrikulos-ecr-private-repo           # set this to your Amazon ECR repository name
   ECS_SERVICE: perrikulos-ecr-service                 # set this to your Amazon ECS service name
   ECS_CLUSTER: perrikulos-cluster-1                 # set this to your Amazon ECS cluster name
   ECS_TASK_DEFINITION: perrikulos-task-def # set this to the path to your Amazon ECS task definition
@@ -36,26 +36,27 @@ jobs:
       id: login-ecr
       uses: aws-actions/amazon-ecr-login@v1
 
-#    - name: Login to ECR Docker
-#      uses: docker/login-action@v1
-#      with:
-#        registry: ${{ secrets.AWS_ECR_REPOSITORY }}
-#        username: ${{ secrets.AWS_ACCESS_KEY_ID }}
-#        password: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+    - name: Login to ECR Docker
+      uses: docker/login-action@v1
+      with:
+        registry: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.us-west-2.amazonaws.com
+        username: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        password: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
     - name: Build, tag, and push image to Amazon ECR
       id: build-image
       env:
-        ECR_REGISTRY: ${{ secrets.ECR_REGISTRY }}
+        ECR_REGISTRY: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.us-west-2.amazonaws.com
         ECR_REPOSITORY: ${{ env.ECR_REPOSITORY }}
         IMAGE_TAG: ${{ github.sha }}
       run: |
         # Build a docker container and
         # push it to ECR so that it can
         # be deployed to ECS.
-        docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
-        docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
-        echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
+        docker build -t perrikulos-ecr-private-repo .
+        docker tag perrikulos-ecr-private-repo:$IMAGE_TAG 094887935327.dkr.ecr.us-west-2.amazonaws.com/perrikulos-ecr-private-repo:$IMAGE_TAG
+        docker push ${{ env.ECR_REGISTRY }}/perrikulos-ecr-private-repo:$IMAGE_TAG
+        echo "::set-output name=image::${{ env.ECR_REGISTRY }}/perrikulos-ecr-private-repo:$IMAGE_TAG"
 
     - name: Render Amazon ECS task definition
       id: render-web-container

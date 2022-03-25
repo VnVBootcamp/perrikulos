@@ -12,8 +12,8 @@ phases:
       - printenv
   build:
     commands:
-      - docker build -f Dockerfile -t public.ecr.aws/i3a0t0o0/perrikulos-ecr-repository:latest .
-      - docker tag public.ecr.aws/i3a0t0o0/perrikulos-ecr-repository:latest public.ecr.aws/i3a0t0o0/perrikulos-ecr-repository:$IMAGE_TAG
+      - docker build -f Dockerfile -t perrikulos-ecr-private-repo .
+      - docker tag perrikulos-ecr-private-repo:latest 094887935327.dkr.ecr.us-west-2.amazonaws.com/perrikulos-ecr-private-repo:$IMAGE_TAG
 
     post_build:
       commands:
