@@ -14,6 +14,7 @@ env:
                                                # file, e.g. .aws/task-definition.json
   CONTAINER_NAME: ecs-devops-sandbox           # set this to the name of the container in the
                                                # containerDefinitions section of your task definition
+  LATEST: latest
 
 jobs:
   deploy:
@@ -48,7 +49,7 @@ jobs:
       env:
         ECR_REGISTRY: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com
         ECR_REPOSITORY: ${{ env.ECR_REPOSITORY }}
-        IMAGE_TAG: ${{ github.sha }}
+        IMAGE_TAG: ${{ env.LATEST }}
       run: |
         # Build a docker container and
         # push it to ECR so that it can
